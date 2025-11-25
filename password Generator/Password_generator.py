@@ -1,48 +1,50 @@
 import random
-import string
 
-def create_password(length=12, include_upper=True, include_lower=True,
-                    include_digits=True, include_symbols=True,
-                    exclude_similar=False):
-    
-    chars = ""
-    similar = "l1I0Oo"
+letters = ["A","B","C","D","E","F","G","H","I","J","K","L",
+           "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+           "a","b","c","d","e","f","g","h","i","j","k","l",
+           "m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 
-    if include_upper:
-        chars += string.ascii_uppercase
-    if include_lower:
-        chars += string.ascii_lowercase
-    if include_digits:
-        chars += string.digits
-    if include_symbols:
-        chars += "!@#$%^&*()-_=+[]{}<>?/"
+numbers = ["0","1","2","3","4","5","6","7","8","9"]
 
-    if exclude_similar:
-        chars = "".join(c for c in chars if c not in similar)
+symbols = ["!","@","#","$","%","&","*","?","/","-","+"]
 
-    if not chars:
-        return "Error: No character types selected."
+similar_chars = ["l","1","I","0","O","o"]
 
-    return "".join(random.choice(chars) for _ in range(length))
+print("Welcome to  Password Generator")
 
+length = int(input("How long do you want your password to be? "))
 
-def main():
-    print("Simple Password Generator")
+include_letters = input("Include letters? (y/n) ").lower() == "y"
+include_numbers = input("Include numbers? (y/n) ").lower() == "y"
+include_symbols = input("Include symbols? (y/n) ").lower() == "y"
+exclude_similar = input("Exclude similar-looking characters (l,1,I,0,O,o)? (y/n) ").lower() == "y"
 
-    length = int(input("Password length: "))
-    include_upper = input("Include uppercase (y/n): ").lower() == 'y'
-    include_lower = input("Include lowercase (y/n): ").lower() == 'y'
-    include_digits = input("Include digits (y/n): ").lower() == 'y'
-    include_symbols = input("Include symbols (y/n): ").lower() == 'y'
-    exclude_similar = input("Exclude similar characters (y/n): ").lower() == 'y'
+character_pool = []
 
-    password = create_password(length, include_upper, include_lower,
-                               include_digits, include_symbols, exclude_similar)
+if include_letters:
+    character_pool += letters
+if include_numbers:
+    character_pool += numbers
+if include_symbols:
+    character_pool += symbols
+
+if exclude_similar:
+    character_pool = [c for c in character_pool if c not in similar_chars]
+
+if len(character_pool) == 0:
+    print("Error: No characters available to generate a password.")
+else:
+    password_list = []
+
+    for _ in range(length):
+        password_list.append(random.choice(character_pool))
+
+    random.shuffle(password_list)
+
+    password = ""
+    for char in password_list:
+        password += char
 
     print("\nGenerated Password:")
     print(password)
-
-
-if __name__ == "__main__":
-    main()
-
